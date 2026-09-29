@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+/*
+ * ============================================================
+ *  DESIGN TOKENS — পুরো ওয়েবসাইটের design এখান থেকে control হবে।
+ *  Component এ কখনো hardcoded hex/px বসাবে না, শুধু এই token ব্যবহার করবে।
+ *  NOTE: color value গুলো Figma থেকে sample করা — Figma Variables/Inspect
+ *  থেকে exact value দিয়ে verify করে নেবে।
+ * ============================================================
+ */
+@theme {
+  /* Brand */
+  --color-primary: #003be2;
+  --color-primary-dark: #0030b8;
+  --color-primary-light: #e6ecff;
+  --color-accent: #d4ff00; /* lime */
+  --color-accent-dark: #b9e000;
+
+  /* Neutrals */
+  --color-ink: #111111; /* heading / main text */
+  --color-body: #4b4b4b; /* paragraph text */
+  --color-muted: #8a8a8a;
+  --color-line: #e8e8ea; /* border */
+  --color-line-strong: #ced0d3; /* card / tile border */
+  --color-navy: #040819; /* course section heading */
+  --color-heading: #242528; /* growth / creator heading */
+  --color-subtle: #82868e; /* section subtitle */
+  --color-surface: #ffffff;
+  --color-surface-alt: #f5f5f6; /* logo strip, light section bg */
+  --color-surface-lime: #f8faed; /* growth section bg */
+
+  /* Feedback */
+  --color-star: #f5b301;
+
+  /* Typography (font variable গুলো layout.tsx থেকে আসছে) */
+  --font-heading: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-satoshi), ui-sans-serif, system-ui, sans-serif;
+
+  /* Radius */
+  --radius-card: 20px;
+  --radius-pill: 999px;
+
+  /* Shadow */
+  --shadow-card: 0 4px 24px rgb(0 0 0 / 0.06);
+  --shadow-float: 0 8px 32px rgb(0 0 0 / 0.12);
+
+  /* Layout */
+  --container-page: 1199px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+/* Reusable utility — সব section এর heading style একই রাখতে */
+@utility section-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--color-ink);
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+  line-height: 1.25;
+}
