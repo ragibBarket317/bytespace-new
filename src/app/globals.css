@@ -1,13 +1,5 @@
 @import "tailwindcss";
 
-/*
- * ============================================================
- *  DESIGN TOKENS — পুরো ওয়েবসাইটের design এখান থেকে control হবে।
- *  Component এ কখনো hardcoded hex/px বসাবে না, শুধু এই token ব্যবহার করবে।
- *  NOTE: color value গুলো Figma থেকে sample করা — Figma Variables/Inspect
- *  থেকে exact value দিয়ে verify করে নেবে।
- * ============================================================
- */
 @theme {
   /* Brand */
   --color-primary: #003be2;
@@ -71,7 +63,6 @@
   }
 }
 
-/* Reusable utility — সব section এর heading style একই রাখতে */
 @utility section-title {
   font-family: var(--font-heading);
   font-weight: 600;

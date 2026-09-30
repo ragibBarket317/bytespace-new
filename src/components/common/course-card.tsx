@@ -1,23 +1,34 @@
 import Image from "next/image";
 import { LevelIcon, StarIcon } from "@/components/icons";
+import { cn } from "@/lib/cn";
 import type { Course } from "@/types";
 
 export function CourseCard({
   course,
   showMeta = false,
+  fluid = false,
 }: {
   course: Course;
   showMeta?: boolean;
+  fluid?: boolean;
 }) {
   return (
-    <article className="h-[384px] rounded-[24px] border border-[#CED0D3] bg-white p-[16px]">
+    <article
+      className={cn(
+        "rounded-[24px] border border-[#CED0D3] bg-white p-[16px]",
+        fluid ? "h-auto xl:h-[384px]" : "h-[384px]",
+      )}
+    >
       <div className="relative">
         <Image
           src={course.image}
           alt={course.title}
           width={341}
           height={195}
-          className="h-[195.14px] w-full rounded-[12px] object-cover"
+          className={cn(
+            "h-[195.14px] w-full rounded-[12px] object-cover",
+            fluid && "aspect-[341/195.14] h-auto xl:h-[195.14px]",
+          )}
         />
 
         {showMeta && (

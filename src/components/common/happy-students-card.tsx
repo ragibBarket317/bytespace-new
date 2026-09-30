@@ -7,7 +7,7 @@ import { u } from "@/lib/design-units";
 interface Props {
   rating?: number;
   reviews?: number;
-  extra?: string; // "2K+" bubble
+  extra?: string;
   avatars?: string[];
   className?: string;
   style?: React.CSSProperties;
