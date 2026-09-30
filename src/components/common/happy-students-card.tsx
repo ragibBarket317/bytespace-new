@@ -7,27 +7,39 @@ import { u } from "@/lib/design-units";
 interface Props {
   rating?: number;
   reviews?: number;
-  extra?: string;
+  extra?: string; // "2K+" bubble
   avatars?: string[];
+  /** white = hero card (default), lime = signup page card (শুধু background/star/ring color বদলায়) */
+  tone?: "white" | "lime";
+  /** avatar circle size / overlap (design px) — signup card এ 42 / -14.86 */
+  avatarSize?: number;
+  avatarOverlap?: number;
   className?: string;
   style?: React.CSSProperties;
 }
 
-const SIZE = 40;
-const OVERLAP = -13.5;
+const DEFAULT_SIZE = 40;
+const DEFAULT_OVERLAP = -13.5;
 
 export function HappyStudentsCard({
   rating = 4.5,
   reviews = 240,
   extra = "2K+",
   avatars = studentAvatars,
+  tone = "white",
+  avatarSize: SIZE = DEFAULT_SIZE,
+  avatarOverlap: OVERLAP = DEFAULT_OVERLAP,
   className,
   style,
 }: Props) {
+  const isLime = tone === "lime";
+  const ringClass = isLime ? "ring-0" : "ring-white"; // Figma lime card এ avatar এর মাঝে ring নেই
+
   return (
     <div
       className={cn(
-        "flex flex-col rounded-[16px] bg-white text-left shadow-(--shadow-float) backdrop-blur-[20px]",
+        "flex flex-col rounded-[16px] text-left",
+        isLime ? "bg-accent" : "bg-white shadow-(--shadow-float) backdrop-blur-[20px]",
         className,
       )}
       style={{ padding: u(16), gap: u(8), ...style }}
@@ -52,7 +64,7 @@ export function HappyStudentsCard({
       >
         <b className="text-ink font-bold">{rating}</b>
         <span>({reviews})</span>
-        <StarIcon className="text-accent-dark" style={{ width: u(15), height: u(15) }} />
+        <StarIcon className={isLime ? "text-primary" : "text-accent-dark"} style={{ width: u(15), height: u(15) }} />
       </p>
 
       <div className="flex items-center">
@@ -63,7 +75,7 @@ export function HappyStudentsCard({
             alt=""
             width={SIZE}
             height={SIZE}
-            className="shrink-0 rounded-full object-cover ring-2 ring-white"
+            className={cn("shrink-0 rounded-full object-cover ring-2", ringClass)}
             style={{
               width: u(SIZE),
               height: u(SIZE),
@@ -73,7 +85,11 @@ export function HappyStudentsCard({
         ))}
 
         <span
-          className="bg-accent flex shrink-0 items-center justify-center rounded-full font-bold text-[#242528] ring-2 ring-white"
+          className={cn(
+            "flex shrink-0 items-center justify-center rounded-full font-bold ring-2",
+            isLime ? "bg-heading text-white" : "bg-accent text-[#242528]",
+            ringClass,
+          )}
           style={{
             width: u(SIZE),
             height: u(SIZE),

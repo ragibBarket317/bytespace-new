@@ -6,29 +6,28 @@ import type { Course } from "@/types";
 export function CourseCard({
   course,
   showMeta = false,
+  starClassName,
+  avatarsTone = "lime",
   fluid = false,
 }: {
   course: Course;
   showMeta?: boolean;
+  /** rating star এর color override (default: grey, signup card এ lime) */
+  starClassName?: string;
+  /** avatar strip এর শেষের "26+" bubble: lime (home, PNG এর মতো) | dark (signup card, Figma তে কালো) */
+  avatarsTone?: "lime" | "dark";
+  /** true হলে <xl এ card/image ratio অনুযায়ী scale করে (grid এর জন্য); false = Figma fixed size */
   fluid?: boolean;
 }) {
   return (
-    <article
-      className={cn(
-        "rounded-[24px] border border-[#CED0D3] bg-white p-[16px]",
-        fluid ? "h-auto xl:h-[384px]" : "h-[384px]",
-      )}
-    >
+    <article className={cn("rounded-[24px] border border-[#CED0D3] bg-white p-[16px]", fluid ? "h-auto xl:h-[384px]" : "h-[384px]")}>
       <div className="relative">
         <Image
           src={course.image}
           alt={course.title}
           width={341}
           height={195}
-          className={cn(
-            "h-[195.14px] w-full rounded-[12px] object-cover",
-            fluid && "aspect-[341/195.14] h-auto xl:h-[195.14px]",
-          )}
+          className={cn("h-[195.14px] w-full rounded-[12px] object-cover", fluid && "aspect-[341/195.14] h-auto xl:h-[195.14px]")}
         />
 
         {showMeta && (
@@ -52,7 +51,7 @@ export function CourseCard({
 
         <span className="flex shrink-0 items-center gap-1 text-[18px] leading-[160%] font-normal text-[#4F4F4F]">
           {course.rating}
-          <StarIcon className="size-[16px] text-[#CED0D3]" />
+          <StarIcon className={cn("size-[16px] text-[#CED0D3]", starClassName)} />
         </span>
       </div>
 
@@ -61,12 +60,20 @@ export function CourseCard({
       </p>
 
       <div className="mt-[17px] flex items-center gap-3">
-        <span className="bg-surface-alt inline-flex h-[32px] items-center gap-1 rounded-[24px] px-3 py-[6px] text-[12px] leading-[120%] font-medium text-[#4B4C53]">
+        <span className="bg-surface-alt inline-flex h-[32px] min-w-[97px] items-center justify-center gap-1 rounded-[24px] px-3 py-[6px] text-[12px] leading-[120%] font-medium text-[#4B4C53]">
           <LevelIcon className="size-3.5" />
           {course.level}
         </span>
 
-        <Image src="/images/common/students-avatars.png" alt="" width={128} height={32} />
+        {/* PNG = ৪টা face + lime "26+" bubble (128x32); dark হলে bubble এর উপর কালো circle বসে */}
+        <span className="relative inline-flex h-[32px] w-[128px] shrink-0">
+          <Image src="/images/common/students-avatars.png" alt="" width={128} height={32} />
+          {avatarsTone === "dark" && (
+            <span className="absolute top-[-1px] left-[95px] flex size-[34px] items-center justify-center rounded-full bg-black text-[14px] leading-none font-medium text-white">
+              26+
+            </span>
+          )}
+        </span>
       </div>
 
       <p className="mt-[15px] leading-[120%]">

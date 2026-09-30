@@ -3,7 +3,6 @@ import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { testimonials } from "@/data/home";
 
-// Figma-র exact glow blob spec (1440px frame অনুযায়ী x/y/size), --u দিয়ে scale হয়
 const glows = [
   {
     w: 850,
@@ -85,8 +84,7 @@ export function Testimonials() {
         {/* Header */}
         <div className="grid gap-5 text-center lg:grid-cols-2 lg:items-end lg:gap-x-9 lg:text-left">
           <h2 className="font-heading mx-auto max-w-[577px] text-[30px] leading-[120%] font-semibold tracking-[-0.3px] text-black sm:text-[36px] lg:mx-0 lg:translate-y-[1.5px] lg:text-[44px] lg:tracking-[-0.44px]">
-            Discover What Our{" "}
-            <br className="hidden sm:block" />
+            Discover What Our <br className="hidden sm:block" />
             Community Is Saying
           </h2>
 
