@@ -3,6 +3,11 @@ import { LevelIcon, StarIcon } from "@/components/icons";
 import { cn } from "@/lib/cn";
 import type { Course } from "@/types";
 
+// Figma: প্রতিটা avatar 32×32, একটার উপর আরেকটা 8px overlap, শেষে 32×32 "26+" bubble
+const courseAvatars = [1, 2, 3, 4].map(
+  (n) => `/images/common/course-avatars/avatar-${n}.png`,
+);
+
 export function CourseCard({
   course,
   showMeta = false,
@@ -12,22 +17,27 @@ export function CourseCard({
 }: {
   course: Course;
   showMeta?: boolean;
-  /** rating star এর color override (default: grey, signup card এ lime) */
   starClassName?: string;
-  /** avatar strip এর শেষের "26+" bubble: lime (home, PNG এর মতো) | dark (signup card, Figma তে কালো) */
   avatarsTone?: "lime" | "dark";
-  /** true হলে <xl এ card/image ratio অনুযায়ী scale করে (grid এর জন্য); false = Figma fixed size */
   fluid?: boolean;
 }) {
   return (
-    <article className={cn("rounded-[24px] border border-[#CED0D3] bg-white p-[16px]", fluid ? "h-auto xl:h-[384px]" : "h-[384px]")}>
+    <article
+      className={cn(
+        "rounded-[24px] border border-[#CED0D3] bg-white p-[16px]",
+        fluid ? "h-auto xl:h-[384px]" : "h-[384px]",
+      )}
+    >
       <div className="relative">
         <Image
           src={course.image}
           alt={course.title}
           width={341}
           height={195}
-          className={cn("h-[195.14px] w-full rounded-[12px] object-cover", fluid && "aspect-[341/195.14] h-auto xl:h-[195.14px]")}
+          className={cn(
+            "h-[195.14px] w-full rounded-[12px] object-cover",
+            fluid && "aspect-[341/195.14] h-auto xl:h-[195.14px]",
+          )}
         />
 
         {showMeta && (
@@ -65,15 +75,27 @@ export function CourseCard({
           {course.level}
         </span>
 
-        {/* PNG = ৪টা face + lime "26+" bubble (128x32); dark হলে bubble এর উপর কালো circle বসে */}
-        <span className="relative inline-flex h-[32px] w-[128px] shrink-0">
-          <Image src="/images/common/students-avatars.png" alt="" width={128} height={32} />
-          {avatarsTone === "dark" && (
-            <span className="absolute top-[-1px] left-[95px] flex size-[34px] items-center justify-center rounded-full bg-black text-[14px] leading-none font-medium text-white">
-              26+
-            </span>
-          )}
-        </span>
+        <div className="flex shrink-0 items-center" aria-hidden>
+          {courseAvatars.map((src, i) => (
+            <Image
+              key={src}
+              src={src}
+              alt=""
+              width={32}
+              height={32}
+              className={cn("size-8 shrink-0 rounded-full", i > 0 && "-ml-2")}
+            />
+          ))}
+
+          <span
+            className={cn(
+              "-ml-2 flex size-8 shrink-0 items-center justify-center rounded-full text-[12px] leading-none font-medium",
+              avatarsTone === "dark" ? "bg-black text-white" : "bg-accent text-[#242528]",
+            )}
+          >
+            26+
+          </span>
+        </div>
       </div>
 
       <p className="mt-[15px] leading-[120%]">

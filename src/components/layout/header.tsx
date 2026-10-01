@@ -1,15 +1,27 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
-import { BagIcon, Logo } from "@/components/icons";
+import { BagIcon } from "@/components/icons";
 import { authNav, mainNav } from "@/config/navigation";
 import { MobileMenu } from "./mobile-menu";
 
 export function Header() {
   return (
     <header className="absolute inset-x-0 top-0 z-50 text-white">
-      <Container className="grid h-20 grid-cols-[1fr_auto_1fr] items-center md:h-[120px]">
-        <Link href="/" aria-label="ByteSpace home" className="justify-self-start">
-          <Logo className="h-7 w-auto md:h-[34px]" />
+      <Container className="grid h-20 max-w-[1440px] grid-cols-[1fr_auto_1fr] items-center md:h-[120px] md:px-[clamp(24px,8.4722vw,122px)]">
+        <Link
+          href="/"
+          aria-label="ByteSpace home"
+          className="justify-self-start md:mt-[35px] md:self-start"
+        >
+          <Image
+            src="/images/common/header-logo.png"
+            alt="ByteSpace"
+            width={171}
+            height={37}
+            priority
+            className="h-7 w-auto md:h-[37px] md:w-[171px]"
+          />
         </Link>
 
         <nav aria-label="Main" className="hidden items-center gap-6 md:flex">

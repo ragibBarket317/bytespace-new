@@ -20,8 +20,8 @@ const glows = [
   {
     w: 600,
     h: 250,
-    top: 40,
-    left: 420,
+    top: 75,
+    left: 430,
     color: "203, 252, 1",
     stops: [
       [0.7, "0%"],

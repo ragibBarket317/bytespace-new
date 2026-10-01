@@ -26,6 +26,19 @@ const shapes = [
   { src: "shape-squiggle-white", box: [1150, 700, 205, 265], side: "right" },
 ] as const;
 
+/* ---------- Mobile (<md) art ----------
+   720px এর নিচে --u 0.5px এ আটকে যায়, তাই left/right anchored shape গুলো person এর উপর চলে আসত।
+   Mobile এ আলাদা normal-flow block: 390px design space, center-anchored, সব shape person এর পিছনে।
+   x = center থেকে বাঁ-দিকের offset, y = block এর নিচ থেকে offset (design px @ 390px)। */
+const m = (n: number) => `calc(${n} * var(--um))`;
+
+const mobileShapes = [
+  { src: "shape-squiggle-sm", x: -182, y: 205, w: 80, h: 79 },
+  { src: "shape-cone", x: 104, y: 214, w: 78, h: 78 },
+  { src: "shape-ring", x: -226, y: -6, w: 138, h: 137 },
+  { src: "shape-squiggle-white", x: 118, y: 6, w: 86, h: 111 },
+] as const;
+
 export function Hero() {
   return (
     <section
@@ -38,16 +51,16 @@ export function Hero() {
       }}
     >
       <div
-        className="mx-auto w-full max-w-[1199px] px-4 pt-[clamp(120px,11.8vw,170px)]"
+        className="mx-auto w-full max-w-[1199px] px-4 pt-[clamp(120px,11.8vw,170px)] md:min-h-(--hero-min)"
         style={
           {
             "--u": "max(calc(min(100vw, 1440px) / 1440), 0.5px)",
-            minHeight: "max(calc(1024 * var(--u)), 720px)",
+            "--hero-min": "max(calc(1024 * var(--u)), 720px)",
           } as React.CSSProperties
         }
       >
         {/* Decorative layer */}
-        <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div aria-hidden className="pointer-events-none absolute inset-0 hidden md:block">
           <div
             className="bg-accent absolute rounded-full"
             style={at([146, 582, 1148, 1148])}
@@ -182,6 +195,60 @@ export function Hero() {
               Search
             </Button>
           </form>
+        </div>
+
+        {/* Mobile art — <md only */}
+        <div
+          aria-hidden
+          className="pointer-events-none relative mt-6 md:hidden"
+          style={
+            {
+              "--um": "calc(min(100vw, 480px) / 390)",
+              height: m(300),
+            } as React.CSSProperties
+          }
+        >
+          <div
+            className="bg-accent absolute rounded-full"
+            style={{
+              width: m(631),
+              height: m(631),
+              left: `calc(50% - ${m(315.5)})`,
+              bottom: m(-388),
+            }}
+          />
+
+          {mobileShapes.map(({ src, x, y, w, h }) => (
+            <Image
+              key={src}
+              src={`/images/home/${src}.png`}
+              alt=""
+              width={w * 3}
+              height={h * 3}
+              className="absolute max-w-none"
+              style={{
+                width: m(w),
+                height: m(h),
+                left: `calc(50% + ${m(x)})`,
+                bottom: m(y),
+              }}
+            />
+          ))}
+
+          <Image
+            src="/images/home/hero-person.png"
+            alt=""
+            width={722}
+            height={515}
+            priority
+            className="absolute max-w-none"
+            style={{
+              width: m(396),
+              height: m(283),
+              left: `calc(50% - ${m(198)})`,
+              bottom: 0,
+            }}
+          />
         </div>
       </div>
     </section>
