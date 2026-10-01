@@ -18,12 +18,25 @@ const at = ([x, y, w, h]: Box, side: "left" | "right" | "center" = "center") => 
 });
 
 const shapes = [
-  { src: "shape-squiggle-lime", box: [0, 270, 210, 295], side: "left" },
+  { src: "shape-squiggle-lime", box: [0, 270, 210, 295], side: "left", hideOnMobile: true },
   { src: "shape-squiggle-sm", box: [175, 477, 177, 176], side: "left" },
   { src: "shape-ring", box: [50, 681, 344, 343], side: "left" },
-  { src: "shape-cylinder", box: [1227, 220, 213, 372], side: "right" },
+  { src: "shape-cylinder", box: [1227, 220, 213, 372], side: "right", hideOnMobile: true },
   { src: "shape-cone", box: [1094, 463, 190, 189], side: "right" },
   { src: "shape-squiggle-white", box: [1150, 700, 205, 265], side: "right" },
+] as const;
+
+/* ---------- Mobile (<md) art ----------
+   720px এর নিচে --u 0.5px এ আটকে যায়, তাই left/right anchored shape গুলো person এর উপর চলে আসত।
+   Mobile এ আলাদা normal-flow block: 390px design space, center-anchored, সব shape person এর পিছনে।
+   x = center থেকে বাঁ-দিকের offset, y = block এর নিচ থেকে offset (design px @ 390px)। */
+const m = (n: number) => `calc(${n} * var(--um))`;
+
+const mobileShapes = [
+  { src: "shape-squiggle-sm", x: -182, y: 205, w: 80, h: 79 },
+  { src: "shape-cone", x: 104, y: 214, w: 78, h: 78 },
+  { src: "shape-ring", x: -226, y: -6, w: 138, h: 137 },
+  { src: "shape-squiggle-white", x: 118, y: 6, w: 86, h: 111 },
 ] as const;
 
 export function Hero() {
@@ -38,16 +51,16 @@ export function Hero() {
       }}
     >
       <div
-        className="mx-auto w-full max-w-[1199px] px-4 pt-[clamp(120px,11.8vw,170px)]"
+        className="mx-auto w-full max-w-[1199px] px-4 pt-[clamp(120px,11.8vw,170px)] md:min-h-(--hero-min)"
         style={
           {
             "--u": "max(calc(min(100vw, 1440px) / 1440), 0.5px)",
-            minHeight: "max(calc(1024 * var(--u)), 720px)",
+            "--hero-min": "max(calc(1024 * var(--u)), 720px)",
           } as React.CSSProperties
         }
       >
         {/* Decorative layer */}
-        <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div aria-hidden className="pointer-events-none absolute inset-0 hidden md:block">
           <div
             className="bg-accent absolute rounded-full"
             style={at([146, 582, 1148, 1148])}
@@ -61,14 +74,16 @@ export function Hero() {
             className="absolute max-w-none"
             style={at([415, 508, 722, 515])}
           />
-          {shapes.map(({ src, box, side }) => (
+          {shapes.map(({ src, box, side, ...rest }) => (
             <Image
               key={src}
               src={`/images/home/${src}.png`}
               alt=""
               width={box[2]}
               height={box[3]}
-              className="absolute max-w-none"
+              className={
+                "hideOnMobile" in rest ? "absolute hidden max-w-none md:block" : "absolute max-w-none"
+              }
               style={at(box, side)}
             />
           ))}
@@ -145,11 +160,11 @@ export function Hero() {
           </form>
         </div> */}
         <div className="relative z-10">
-          <h1 className="font-heading mx-auto max-w-[935px] text-[clamp(2.25rem,5vw,72px)] leading-[1.2] font-semibold tracking-[-0.72px] text-white">
+          <h1 className="font-heading mx-auto max-w-[935px] text-[clamp(2rem,5vw,72px)] leading-[1.2] font-semibold tracking-[-0.72px] text-white">
             Get Access to Hundreds Courses Available
           </h1>
 
-          <p className="mx-auto mt-[clamp(20px,2.4vw,34px)] max-w-[819px] text-[18px] leading-[160%] text-[#E5E6E8]">
+          <p className="mx-auto mt-[clamp(20px,2.4vw,34px)] max-w-[819px] text-base leading-[160%] text-[#E5E6E8] sm:text-[18px]">
             Unlock your creativity, gain valuable knowledge, and grow your business with
             our wide range of courses.
           </p>
@@ -157,29 +172,83 @@ export function Hero() {
           <form
             action="/courses"
             role="search"
-            className="mx-auto mt-[clamp(28px,4.2vw,60px)] flex max-w-[581px] items-start gap-4"
+            className="mx-auto mt-[clamp(28px,4.2vw,60px)] flex max-w-[581px] items-start gap-3 sm:gap-4"
           >
-            <label className="relative block h-[52px] flex-1">
+            <label className="relative block h-[52px] min-w-0 flex-1">
               <span className="sr-only">Search courses</span>
 
-              <SearchIcon className="text-muted absolute top-1/2 left-[26px] size-5 -translate-y-1/2" />
+              <SearchIcon className="text-muted absolute top-1/2 left-[18px] size-5 -translate-y-1/2 sm:left-[26px]" />
 
               <input
                 type="search"
                 name="q"
                 placeholder="Course, topic, creator"
-                className="text-ink placeholder:text-muted h-full w-full rounded-[24px] bg-white pr-6 pl-[56px] text-[18px] leading-[160%] outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                className="text-ink placeholder:text-muted h-full w-full rounded-[24px] bg-white pr-4 pl-[46px] text-base leading-[160%] outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:pr-6 sm:pl-[56px] sm:text-[18px]"
               />
             </label>
 
             <Button
               type="submit"
               size="md"
-              className="h-[46px] w-[104px] px-6 text-[18px] font-normal"
+              className="h-[46px] w-[92px] shrink-0 px-4 text-base font-normal sm:w-[104px] sm:px-6 sm:text-[18px]"
             >
               Search
             </Button>
           </form>
+        </div>
+
+        {/* Mobile art — <md only */}
+        <div
+          aria-hidden
+          className="pointer-events-none relative mt-6 md:hidden"
+          style={
+            {
+              "--um": "calc(min(100vw, 480px) / 390)",
+              height: m(300),
+            } as React.CSSProperties
+          }
+        >
+          <div
+            className="bg-accent absolute rounded-full"
+            style={{
+              width: m(631),
+              height: m(631),
+              left: `calc(50% - ${m(315.5)})`,
+              bottom: m(-388),
+            }}
+          />
+
+          {mobileShapes.map(({ src, x, y, w, h }) => (
+            <Image
+              key={src}
+              src={`/images/home/${src}.png`}
+              alt=""
+              width={w * 3}
+              height={h * 3}
+              className="absolute max-w-none"
+              style={{
+                width: m(w),
+                height: m(h),
+                left: `calc(50% + ${m(x)})`,
+                bottom: m(y),
+              }}
+            />
+          ))}
+
+          <Image
+            src="/images/home/hero-person.png"
+            alt=""
+            width={722}
+            height={515}
+            priority
+            className="absolute max-w-none"
+            style={{
+              width: m(396),
+              height: m(283),
+              left: `calc(50% - ${m(198)})`,
+              bottom: 0,
+            }}
+          />
         </div>
       </div>
     </section>

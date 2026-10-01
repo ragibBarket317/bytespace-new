@@ -1,12 +1,8 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { SignupForm } from "@/components/sections/auth/signup-form";
 import { SignupShowcase } from "@/components/sections/auth/signup-showcase";
 import { siteConfig } from "@/config/site";
 import { u } from "@/lib/design-units";
-
-export const metadata: Metadata = { title: "Sign up" };
 
 const LINE = "rgb(255 255 255 / 0.12)";
 const gridStyle: React.CSSProperties = {
@@ -15,7 +11,13 @@ const gridStyle: React.CSSProperties = {
   backgroundPosition: "calc(50% + 60 * var(--u)) calc(118 * var(--u))",
 };
 
-export default function SignupPage() {
+interface Props {
+  title: string;
+  description: string;
+  children: React.ReactNode;
+}
+
+export function AuthLayout({ title, description, children }: Props) {
   return (
     <main
       className="bg-primary relative min-h-dvh overflow-hidden [--u:1px] lg:[--u:max(calc(min(100vw,1440px)/1440),0.5px)]"
@@ -46,15 +48,14 @@ export default function SignupPage() {
             className="font-heading font-semibold text-[#F5F5F6]"
             style={{ fontSize: u(20), lineHeight: 1.2, letterSpacing: "-0.01em" }}
           >
-            Sign up and come in
+            {title}
           </h2>
-          <p style={{ fontSize: u(18), lineHeight: 1.6 }}>
-            The registration process is straightforward, uncomplicated, and efficient,
-            allowing users to sign up quickly, easily, and at no cost
-          </p>
+          <p style={{ fontSize: u(18), lineHeight: 1.6 }}>{description}</p>
         </div>
 
-        <SignupForm className="lg:absolute lg:top-[calc(120*var(--u))] lg:left-[calc(741*var(--u))] lg:w-[calc(579*var(--u))]" />
+        <div className="lg:absolute lg:top-[calc(120*var(--u))] lg:left-[calc(741*var(--u))] lg:h-[calc(784*var(--u))] lg:w-[calc(579*var(--u))]">
+          {children}
+        </div>
 
         <SignupShowcase className="mx-auto [--fit:min(calc(100vw_-_32px),548px)] lg:absolute lg:top-[calc(305*var(--u))] lg:left-[calc(97*var(--u))] lg:mx-0 lg:[--fit:calc(548*var(--u))]" />
       </div>

@@ -2,13 +2,12 @@ import { cn } from "@/lib/cn";
 import { u } from "@/lib/design-units";
 
 interface Props {
-  value: number; // 0-100
+  value: number;
   label?: string;
   className?: string;
   style?: React.CSSProperties;
 }
 
-// Hero and Growth section
 export function LearningProgressCard({
   value,
   label = "Learning Progress",
